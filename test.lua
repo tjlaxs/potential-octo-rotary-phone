@@ -15,6 +15,18 @@ M.ResultToBe = function(string, test)
   return { it = string, res = test }
 end
 
+local function print_failures(fails)
+  for i, fail in pairs(fails) do
+    if fail.test.assert then
+      print("  " .. i .. ": " .. fail.it)
+      print("    " .. fail.test.assert)
+    else
+      print("  " .. i .. ": " .. fail.it)
+      print("    " .. fail.test.result .. " ≠ " .. fail.test.toBe)
+    end
+  end
+end
+
 M.run = function()
   -- run tests
   for _, test in pairs(M._tests) do
@@ -34,10 +46,7 @@ M.run = function()
   local result_string = "/" .. all
   if M._meta.fail > 0 then
     print("Failures:")
-    for i, fail in pairs(M._meta.fails) do
-      print("  " .. i .. ": " .. fail.it)
-      print("    " .. fail.test.result .. " ≠ " .. fail.test.toBe)
-    end
+    print_failures(M._meta.fails)
     print("")
     print("Failed tests: " .. M._meta.fail .. result_string)
   else
@@ -89,6 +98,9 @@ function M.expectSuperficial(result, toBe)
 end
 
 function M.expect(result, toBe)
+  if type(result) == 'table' or type(toBe) == 'table' then
+    return { assert = 'expect does not work with table', expect = false }
+  end
   return { result = result, toBe = toBe, expect = result == toBe }
 end
 
