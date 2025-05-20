@@ -36,7 +36,7 @@ M.run = function()
     print("Failures:")
     for i, fail in pairs(M._meta.fails) do
       print("  " .. i .. ": " .. fail.it)
-      print("    " .. fail.test.result .. " != " .. fail.test.toBe)
+      print("    " .. fail.test.result .. " ≠ " .. fail.test.toBe)
     end
     print("")
     print("Failed tests: " .. M._meta.fail .. result_string)
@@ -48,6 +48,27 @@ end
 
 function M.it(string, fun)
   table.insert(M._tests, M.Test(string, fun))
+end
+
+local function _expectSuperficial(result, toBe)
+  local all_keys = {}
+  for key, result_value in pairs(result) do
+    local to_be_value = toBe[key]
+    if result_value ~= to_be_value then
+      return false
+    end
+    all_keys[key] = true
+  end
+  for key, _ in pairs(toBe) do
+    if not all_keys[key] then
+      return false
+    end
+  end
+  return true
+end
+
+function M.expectSuperficial(result, toBe)
+  return { result = result, toBe = toBe, expect = _expectSuperficial(result, toBe) }
 end
 
 function M.expect(result, toBe)
