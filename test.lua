@@ -67,12 +67,33 @@ local function _expectSuperficial(result, toBe)
   return true
 end
 
+local function print_kv_table(t)
+  local str = 'Table('
+  local key, value = next(t)
+  while key do
+    str = str .. key .. '=' .. value
+    key, value = next(t, key)
+    if key then
+      str = str .. ', '
+    end
+  end
+  return str .. ')'
+end
+
 function M.expectSuperficial(result, toBe)
-  return { result = result, toBe = toBe, expect = _expectSuperficial(result, toBe) }
+  return {
+    result = print_kv_table(result),
+    toBe = print_kv_table(toBe),
+    expect = _expectSuperficial(result, toBe)
+  }
 end
 
 function M.expect(result, toBe)
   return { result = result, toBe = toBe, expect = result == toBe }
+end
+
+function M.contrast(test)
+  return { result = test.result, toBe = test.toBe, expect = not test.expect }
 end
 
 return M
