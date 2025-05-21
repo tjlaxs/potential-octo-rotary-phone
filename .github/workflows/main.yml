@@ -1,0 +1,9 @@
+name: simple-lua-tests
+run-name: ${{ github.actor }} running tests
+on: [push]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
