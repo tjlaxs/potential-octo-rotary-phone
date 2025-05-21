@@ -1,4 +1,5 @@
 # potential-octo-rotary-phone
+[![simple-lua-tests](https://github.com/tjlaxs/potential-octo-rotary-phone/actions/workflows/main.yml/badge.svg)](https://github.com/tjlaxs/potential-octo-rotary-phone/actions/workflows/main.yml)
 
 Note: PLZ don't use :D
 
