@@ -49,9 +49,11 @@ M.run = function()
     print_failures(M._meta.fails)
     print("")
     print("Failed tests: " .. M._meta.fail .. result_string)
+    os.exit(-1)
   else
     print("")
     print("All tests ok: " .. M._meta.ok .. result_string)
+    os.exit(0)
   end
 end
 
