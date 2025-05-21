@@ -1,2 +1,2 @@
 test:
-	lua tests.lua
+	@lua tests.lua

@@ -13,7 +13,7 @@ T.it('asserts table result', function()
   return T.contrast(T.expect({}, 1))
 end)
 
-T.it('it asserts on tables', function()
+T.it('asserts on tables', function()
   return T.contrast(T.expect({}, {}))
 end)
 
