@@ -90,6 +90,9 @@ local function print_kv_table(t)
 end
 
 function M.expectSuperficial(result, toBe)
+  if type(result) ~= 'table' or type(toBe) ~= 'table' then
+    return { assert = 'expectSuperficial works with tables', expect = false }
+  end
   return {
     result = print_kv_table(result),
     toBe = print_kv_table(toBe),

@@ -1,7 +1,7 @@
 local T = require("test")
 
 -- Note:
---   - T.contrast used heavily because we are testing that functions test
+--   - T.contrast used heavily because we are testing that functions work
 
 --- expect
 
@@ -27,7 +27,28 @@ end)
 
 --- expectSuperficial
 
-T.it('should have superficial expect', function()
+T.it('asserts on nontables', function()
+  return T.contrast(T.expect(1, 2))
+end)
+
+T.it('asserts on nontable result', function()
+  return T.contrast(T.expect(1, {}))
+end)
+
+T.it('asserts on nontable toBe', function()
+  return T.contrast(T.expect({}, 1))
+end)
+
+T.it('is ok with same object', function()
+  local p = { x = 10, y = 20 }
+  return T.expectSuperficial(p, p)
+end)
+
+T.it('works with tables with same values', function()
+  return T.expectSuperficial({ x = 20, y = 10 }, { x = 20, y = 10 })
+end)
+
+T.it('does not care order of table values', function()
   return T.expectSuperficial({ x = 10, y = 20 }, { y = 20, x = 10 })
 end)
 
