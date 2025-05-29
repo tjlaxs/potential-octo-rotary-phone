@@ -15,7 +15,7 @@ T.it('flips twice and nothing happens', function()
   return T.contrast(contrast)
 end)
 
---- assertable
+--- assert
 T.it('should create assert', function()
   return T.contrast(T.assert('it gives an assert fail'))
 end)
@@ -80,5 +80,13 @@ end)
 T.it('should fail with different objects 3', function()
   return T.contrast(T.expectSuperficial({ y = 20 }, { y = 20, x = 10 }))
 end)
+
+--- misc
+---   should be tested with external tools / additional tests
+---   Note: at least probably T.contrast should be here
+
+-- Note: Just tested by uncommenting
+--T.it('should throw error if no test result', function()
+--end)
 
 T.run()

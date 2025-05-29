@@ -18,11 +18,11 @@ end
 local function print_failures(fails)
   for i, fail in pairs(fails) do
     if fail.test.assert then
-      print("  " .. i .. "(assert): " .. fail.it)
-      print("    " .. fail.test.assert)
+      print('  ' .. i .. ': ' .. fail.it .. ' (ASSERT)')
+      print('    ' .. fail.test.assert)
     else
-      print("  " .. i .. ": " .. fail.it)
-      print("    " .. fail.test.result .. " ≠ " .. fail.test.toBe)
+      print('  ' .. i .. ': ' .. fail.it)
+      print('    ' .. fail.test.result .. ' ≠ ' .. fail.test.toBe)
     end
   end
 end
@@ -30,7 +30,12 @@ end
 M.run = function()
   -- run tests
   for _, test in pairs(M._tests) do
-    table.insert(M._results, { it = test.it, test = test.fun() })
+    local test_it = test.it
+    local test_res = test.fun()
+    if test_res == nil then
+      test_res = M.assert('Test function not returning boolean!')
+    end
+    table.insert(M._results, { it = test_it, test = test_res })
   end
   -- calculate success rate
   for _, result in pairs(M._results) do
@@ -43,16 +48,16 @@ M.run = function()
   end
   -- give the results
   local all = M._meta.ok + M._meta.fail
-  local result_string = "/" .. all
+  local result_string = '/' .. all
   if M._meta.fail > 0 then
-    print("Failures:")
+    print('Failures:')
     print_failures(M._meta.fails)
-    print("")
-    print("Failed tests: " .. M._meta.fail .. result_string)
+    print('')
+    print('Failed tests: ' .. M._meta.fail .. result_string)
     os.exit(-1)
   else
-    print("")
-    print("All tests ok: " .. M._meta.ok .. result_string)
+    print('')
+    print('All tests ok: ' .. M._meta.ok .. result_string)
     os.exit(0)
   end
 end
