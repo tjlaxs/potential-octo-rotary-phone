@@ -3,6 +3,23 @@ local T = require("test")
 -- Note:
 --   - T.contrast used heavily because we are testing that functions work
 
+--- contrast
+T.it('should flip result', function()
+  local test = T.expect('fail', 'true')
+  return T.contrast(test)
+end)
+
+T.it('flips twice and nothing happens', function()
+  local test = T.expect('true', 'true')
+  local contrast = T.contrast(test)
+  return T.contrast(contrast)
+end)
+
+--- assertable
+T.it('should create assert', function()
+  return T.contrast(T.assert('it gives an assert fail'))
+end)
+
 --- expect
 
 T.it('asserts table toBe', function()
