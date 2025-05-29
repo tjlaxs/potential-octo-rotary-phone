@@ -9,6 +9,10 @@ T.it('prints fail case in booleans', function()
   return T.expect(true, false)
 end)
 
+T.it('tests the ci', function()
+  return T.expect(true, true)
+end)
+
 T.it('prints fail case in numbers', function()
   return T.expect(1, 2)
 end)
