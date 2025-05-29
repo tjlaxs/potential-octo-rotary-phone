@@ -76,6 +76,16 @@ local function calculate_success_rate()
 end
 
 local function give_results()
+  if M._settings.all_fail == true then
+    local f = M._meta.fail
+    local s = M._meta.ok
+    if s == 0 and f > 0 then
+      os.exit(0)
+    else
+      os.exit(1)
+    end
+  end
+
   local all = M._meta.ok + M._meta.fail
   local result_string = '/' .. all
   if M._meta.fail > 0 then
@@ -95,15 +105,6 @@ M.run = function()
   parse_args()
   run_tests()
   calculate_success_rate()
-  if M._settings.all_fail == true then
-    local f = M._meta.fail
-    local s = M._meta.ok
-    if s == 0 and f > 0 then
-      os.exit(0)
-    else
-      os.exit(1)
-    end
-  end
   give_results()
 end
 
