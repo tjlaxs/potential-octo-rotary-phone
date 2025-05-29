@@ -18,7 +18,7 @@ end
 local function print_failures(fails)
   for i, fail in pairs(fails) do
     if fail.test.assert then
-      print("  " .. i .. ": " .. fail.it)
+      print("  " .. i .. "(assert): " .. fail.it)
       print("    " .. fail.test.assert)
     else
       print("  " .. i .. ": " .. fail.it)
@@ -93,7 +93,7 @@ end
 
 function M.expectSuperficial(result, toBe)
   if type(result) ~= 'table' or type(toBe) ~= 'table' then
-    return { assert = 'expectSuperficial works with tables', expect = false }
+    return M.assert('expectSuperficial works with tables', false)
   end
   return {
     result = print_kv_table(result),
@@ -102,9 +102,16 @@ function M.expectSuperficial(result, toBe)
   }
 end
 
+function M.assert(text, expect)
+  return {
+    assert = text,
+    expect = expect,
+  }
+end
+
 function M.expect(result, toBe)
   if type(result) == 'table' or type(toBe) == 'table' then
-    return { assert = 'expect does not work with table', expect = false }
+    return M.assert('expect does not work with table', false)
   end
   return { result = result, toBe = toBe, expect = result == toBe }
 end
