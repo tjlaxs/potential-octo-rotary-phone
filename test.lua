@@ -27,8 +27,7 @@ local function print_failures(fails)
   end
 end
 
-M.run = function()
-  -- run tests
+local function run_tests()
   for _, test in pairs(M._tests) do
     local test_it = test.it
     local test_res = test.fun()
@@ -37,7 +36,9 @@ M.run = function()
     end
     table.insert(M._results, { it = test_it, test = test_res })
   end
-  -- calculate success rate
+end
+
+local function calculate_success_rate()
   for _, result in pairs(M._results) do
     if result.test.expect then
       M._meta.ok = M._meta.ok + 1
@@ -46,7 +47,9 @@ M.run = function()
       table.insert(M._meta.fails, result)
     end
   end
-  -- give the results
+end
+
+local function give_results()
   local all = M._meta.ok + M._meta.fail
   local result_string = '/' .. all
   if M._meta.fail > 0 then
@@ -60,6 +63,12 @@ M.run = function()
     print('All tests ok: ' .. M._meta.ok .. result_string)
     os.exit(0)
   end
+end
+
+M.run = function()
+  run_tests()
+  calculate_success_rate()
+  give_results()
 end
 
 function M.it(string, fun)
