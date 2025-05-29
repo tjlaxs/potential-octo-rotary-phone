@@ -9,4 +9,5 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install lua5.4
       - run: make test
+      - run: make check_fails
       - run: lua example.lua || echo $?

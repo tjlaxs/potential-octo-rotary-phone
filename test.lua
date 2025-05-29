@@ -3,6 +3,7 @@ local M = {}
 M._tests = {}
 M._results = {}
 M._meta = { ok = 0, fail = 0, fails = {} }
+M._settings = {}
 
 M.Table = function(t)
   return table.concat(t, ', ')
@@ -29,6 +30,14 @@ M.RunnedTest = function(it, result, number)
     test = result,
     number = number,
   }
+end
+
+local function parse_args()
+  for _, v in pairs(arg) do
+    if v == '--all-fail' then
+      M._settings.all_fail = true
+    end
+  end
 end
 
 local function print_failures(fails)
@@ -83,8 +92,18 @@ local function give_results()
 end
 
 M.run = function()
+  parse_args()
   run_tests()
   calculate_success_rate()
+  if M._settings.all_fail == true then
+    local f = M._meta.fail
+    local s = M._meta.ok
+    if s == 0 and f > 0 then
+      os.exit(0)
+    else
+      os.exit(1)
+    end
+  end
   give_results()
 end
 

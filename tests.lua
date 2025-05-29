@@ -81,30 +81,4 @@ T.it('should fail with different objects 3', function()
   return T.contrast(T.expectSuperficial({ y = 20 }, { y = 20, x = 10 }))
 end)
 
---- misc
-
----   should be tested with external tools / additional tests
----   Note: at least probably T.contrast should be here
-
--- Note: Just tested by uncommenting
---T.it('should throw error if no test result', function()
---end)
-
--- Note: Just tested by uncommenting
---T.it('prints fail case in booleans', function()
---  return T.expect(true, false)
---end)
---T.it('prints fail case in numbers', function()
---  return T.expect(1, 2)
---end)
---T.it('prints fail case in strings', function()
---  return T.expect('foo', 'bar')
---end)
---T.it('prints fail case in tables', function()
---  return T.expect({}, {})
---end)
---T.it('prints fail case in functions', function()
---  return T.expect(function() end, function() end)
---end)
-
 T.run()
