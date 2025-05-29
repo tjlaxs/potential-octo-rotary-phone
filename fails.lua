@@ -1,5 +1,7 @@
 local T = require("test")
 
+--- Tests in this file are checked in pipeline to fail
+
 T.it('should throw error if no test result', function()
 end)
 
