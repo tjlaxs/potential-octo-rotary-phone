@@ -29,7 +29,7 @@ local function print_failures(fails)
       print('    ' .. fail.test.assert)
     else
       print('  ' .. fail.number .. ': ' .. fail.it)
-      print('    ' .. fail.test.result .. ' ≠ ' .. fail.test.toBe)
+      print('    ' .. tostring(fail.test.result) .. ' ≠ ' .. tostring(fail.test.toBe))
     end
   end
 end
