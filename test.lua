@@ -11,30 +11,38 @@ end
 M.Test = function(string, test)
   return { it = string, fun = test }
 end
+M.RunnedTest = function(it, result, number)
+  return {
+    it = it,
+    test = result,
+    number = number,
+  }
+end
 M.ResultToBe = function(string, test)
   return { it = string, res = test }
 end
 
 local function print_failures(fails)
-  for i, fail in pairs(fails) do
+  for _, fail in pairs(fails) do
     if fail.test.assert then
-      print('  ' .. i .. ': ' .. fail.it .. ' (ASSERT)')
+      print('  ' .. fail.number .. ': ' .. fail.it .. ' (ASSERT)')
       print('    ' .. fail.test.assert)
     else
-      print('  ' .. i .. ': ' .. fail.it)
+      print('  ' .. fail.number .. ': ' .. fail.it)
       print('    ' .. fail.test.result .. ' ≠ ' .. fail.test.toBe)
     end
   end
 end
 
 local function run_tests()
-  for _, test in pairs(M._tests) do
-    local test_it = test.it
-    local test_res = test.fun()
-    if test_res == nil then
-      test_res = M.assert('Test function not returning boolean!')
+  for i, test in pairs(M._tests) do
+    local run = M.RunnedTest(test.it, test.fun(), i)
+    if run.test == nil then
+      run.test = M.assert('Test function not returning boolean!')
+      run.it = test.it
+      run.number = i
     end
-    table.insert(M._results, { it = test_it, test = test_res })
+    table.insert(M._results, run)
   end
 end
 
