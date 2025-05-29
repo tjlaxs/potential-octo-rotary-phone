@@ -8,18 +8,27 @@ M.Table = function(t)
   return table.concat(t, ', ')
 end
 
-M.Test = function(string, test)
-  return { it = string, fun = test }
+M.Test = function(it, fun)
+  return {
+    it = it,
+    fun = fun,
+  }
 end
+
+M.TestCase = function(result, toBe, expect)
+  return {
+    result = result,
+    toBe = toBe,
+    expect = expect,
+  }
+end
+
 M.RunnedTest = function(it, result, number)
   return {
     it = it,
     test = result,
     number = number,
   }
-end
-M.ResultToBe = function(string, test)
-  return { it = string, res = test }
 end
 
 local function print_failures(fails)
@@ -117,11 +126,11 @@ function M.expectSuperficial(result, toBe)
   if type(result) ~= 'table' or type(toBe) ~= 'table' then
     return M.assert('expectSuperficial works with tables', false)
   end
-  return {
-    result = print_kv_table(result),
-    toBe = print_kv_table(toBe),
-    expect = _expectSuperficial(result, toBe)
-  }
+  return M.TestCase(
+    print_kv_table(result),
+    print_kv_table(toBe),
+    _expectSuperficial(result, toBe)
+  )
 end
 
 function M.assert(text, expect)
@@ -135,11 +144,11 @@ function M.expect(result, toBe)
   if type(result) == 'table' or type(toBe) == 'table' then
     return M.assert('expect does not work with table', false)
   end
-  return { result = result, toBe = toBe, expect = result == toBe }
+  return M.TestCase(result, toBe, result == toBe)
 end
 
 function M.contrast(test)
-  return { result = test.result, toBe = test.toBe, expect = not test.expect }
+  return M.TestCase(test.result, test.toBe, not test.expect)
 end
 
 return M
