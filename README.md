@@ -7,6 +7,8 @@ Very simple test "framework", if you can even call it that.
 
 ## Example
 
+https://github.com/tjlaxs/potential-octo-rotary-phone/blob/main/example.lua#L1-L17
+
 Running `lua example.lua`
 ```
 ❯ lua example.lua 
