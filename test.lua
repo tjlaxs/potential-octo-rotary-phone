@@ -11,33 +11,42 @@ end
 M.Test = function(string, test)
   return { it = string, fun = test }
 end
+M.RunnedTest = function(it, result, number)
+  return {
+    it = it,
+    test = result,
+    number = number,
+  }
+end
 M.ResultToBe = function(string, test)
   return { it = string, res = test }
 end
 
 local function print_failures(fails)
-  for i, fail in pairs(fails) do
+  for _, fail in pairs(fails) do
     if fail.test.assert then
-      print('  ' .. i .. ': ' .. fail.it .. ' (ASSERT)')
+      print('  ' .. fail.number .. ': ' .. fail.it .. ' (ASSERT)')
       print('    ' .. fail.test.assert)
     else
-      print('  ' .. i .. ': ' .. fail.it)
+      print('  ' .. fail.number .. ': ' .. fail.it)
       print('    ' .. fail.test.result .. ' ≠ ' .. fail.test.toBe)
     end
   end
 end
 
-M.run = function()
-  -- run tests
-  for _, test in pairs(M._tests) do
-    local test_it = test.it
-    local test_res = test.fun()
-    if test_res == nil then
-      test_res = M.assert('Test function not returning boolean!')
+local function run_tests()
+  for i, test in pairs(M._tests) do
+    local run = M.RunnedTest(test.it, test.fun(), i)
+    if run.test == nil then
+      run.test = M.assert('Test function not returning boolean!')
+      run.it = test.it
+      run.number = i
     end
-    table.insert(M._results, { it = test_it, test = test_res })
+    table.insert(M._results, run)
   end
-  -- calculate success rate
+end
+
+local function calculate_success_rate()
   for _, result in pairs(M._results) do
     if result.test.expect then
       M._meta.ok = M._meta.ok + 1
@@ -46,7 +55,9 @@ M.run = function()
       table.insert(M._meta.fails, result)
     end
   end
-  -- give the results
+end
+
+local function give_results()
   local all = M._meta.ok + M._meta.fail
   local result_string = '/' .. all
   if M._meta.fail > 0 then
@@ -60,6 +71,12 @@ M.run = function()
     print('All tests ok: ' .. M._meta.ok .. result_string)
     os.exit(0)
   end
+end
+
+M.run = function()
+  run_tests()
+  calculate_success_rate()
+  give_results()
 end
 
 function M.it(string, fun)
